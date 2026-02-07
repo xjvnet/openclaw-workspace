@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+"""
+股票预警脚本 - 优化版，直接调用腾讯接口
+"""
+import requests
+import json
+import os
+from datetime import datetime
+
+# ========== 配置 ==========
+ALERTS = [
+    {"code": "002734", "name": "利民股份", "condition": "above", "price": 25.8},
+]
+
+STATE_FILE = "/root/.openclaw/workspace/.stock_alert_state.json"
+# ==========================
+
+def load_state():
+    if os.path.exists(STATE_FILE):
+        with open(STATE_FILE, 'r') as f:
+            return json.load(f)
+    return {}
+
+def save_state(state):
+    with open(STATE_FILE, 'w') as f:
+        json.dump(state, f)
+
+def get_stock_price(code):
+    """通过腾讯接口获取实时股价"""
+    try:
+        # 格式化代码
+        if code.startswith('6'):  # 上海
+            full_code = f"sh{code}"
+        else:  # 深圳
+            full_code = f"sz{code}"
+        
+        url = f"https://qt.gtimg.cn/q={full_code}"
+        resp = requests.get(url, timeout=10)
+        resp.encoding = 'gbk'
+        
+        # 解析返回数据: v_sh002734="1~利民股份~...~当前价~..."
+        data = resp.text.strip()
+        if not data or '~' not in data:
+            return None
+        
+        parts = data.split('~')
+        if len(parts) >= 4:
+            return float(parts[3])  # 当前价在第4个位置
+    except Exception as e:
+        print(f"获取 {code} 失败: {e}")
+    return None
+
+def check_alerts():
+    state = load_state()
+    triggered = []
+    
+    for alert in ALERTS:
+        code = alert['code']
+        name = alert['name']
+        price = get_stock_price(code)
+        
+        if price is None:
+            print(f"[{datetime.now().strftime('%H:%M:%S')}] {name}({code}) 查询失败")
+            continue
+        
+        print(f"[{datetime.now().strftime('%H:%M:%S')}] {name}({code}): ¥{price}")
+        
+        condition_met = False
+        alert_key = f"{code}_{alert['condition']}_{alert['price']}"
+        
+        if alert['condition'] == 'below' and price < alert['price']:
+            condition_met = True
+            msg = f"🚨 {name}({code}) 跌破 ¥{alert['price']}，当前 ¥{price}"
+        elif alert['condition'] == 'above' and price > alert['price']:
+            condition_met = True
+            msg = f"🚨 {name}({code}) 突破 ¥{alert['price']}，当前 ¥{price}"
+        
+        # 避免重复报警（同一天内只报一次）
+        today = datetime.now().strftime('%Y-%m-%d')
+        if condition_met and state.get(alert_key) != today:
+            triggered.append(msg)
+            state[alert_key] = today
+            print(f"⚠️ 触发预警: {msg}")
+    
+    save_state(state)
+    return triggered
+
+if __name__ == "__main__":
+    alerts = check_alerts()
+    for msg in alerts:
+        print(msg)

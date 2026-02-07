@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "skills": {
+    "notion": {
+      "version": "1.0.0",
+      "installedAt": 1770288218845
+    },
+    "obsidian": {
+      "version": "1.0.0",
+      "installedAt": 1770367294904
+    }
+  }
+}

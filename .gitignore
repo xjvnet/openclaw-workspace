@@ -1,0 +1,39 @@
+# OpenClaw Workspace Gitignore
+
+# Sensitive files
+**/auth-profiles.json
+**/.env
+**/*.key
+**/*.pem
+**/secrets.*
+
+# Runtime files
+*.log
+*.pid
+*.sock
+.cache/
+temp/
+tmp/
+
+# Large files
+*.tar.gz
+*.zip
+*.dmg
+*.exe
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node modules (if any)
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Backup files (optional, can include if desired)
+# backups/
+# *.bak
