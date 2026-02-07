@@ -38,8 +38,12 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 ---
 
 Add whatever helps you do your job. This is your cheat sheet.
+<<<<<<< HEAD
 Hello from Mac
 Hello from Mac
 Hello from Mac
 Hello from Mac
 Mac test 2026年 2月 7日 星期六 21时21分25秒 CST
+=======
+Hello from VPS
+>>>>>>> 10ca84d08a4fb311ed2e21830e87639eed9717d3
