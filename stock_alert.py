@@ -85,7 +85,30 @@ def check_alerts():
     save_state(state)
     return triggered
 
+def is_trading_time():
+    """检查是否是A股交易时间（周一到周五，9:30-11:30, 13:00-15:00）"""
+    now = datetime.now()
+    weekday = now.weekday()  # 0-6 (周一到周日)
+    hour = now.hour
+    minute = now.minute
+    time_val = hour * 100 + minute  # 如 930 表示 9:30
+    
+    # 周一到周五 (0-4)
+    if weekday > 4:
+        return False
+    
+    # 上午 9:30-11:30 或 下午 13:00-15:00
+    if (930 <= time_val <= 1130) or (1300 <= time_val <= 1500):
+        return True
+    
+    return False
+
 if __name__ == "__main__":
+    # 检查是否是交易时间
+    if not is_trading_time():
+        print(f"[{datetime.now().strftime('%H:%M:%S')}] 非A股交易时间，跳过检查")
+        exit(0)
+    
     alerts = check_alerts()
     for msg in alerts:
         print(msg)
