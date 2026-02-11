@@ -12,6 +12,10 @@
     "apple-notes": {
       "version": "1.0.0",
       "installedAt": 1770835190256
+    },
+    "agent-browser-clawdbot": {
+      "version": "0.1.0",
+      "installedAt": 1770842203209
     }
   }
 }
