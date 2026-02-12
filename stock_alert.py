@@ -86,8 +86,10 @@ def check_alerts():
     return triggered
 
 def is_trading_time():
-    """检查是否是A股交易时间（周一到周五，9:30-11:30, 13:00-15:00）"""
-    now = datetime.now()
+    """检查是否是A股交易时间（周一到周五，9:30-11:30, 13:00-15:00）北京时间"""
+    import pytz
+    tz = pytz.timezone('Asia/Shanghai')
+    now = datetime.now(tz)
     weekday = now.weekday()  # 0-6 (周一到周日)
     hour = now.hour
     minute = now.minute
