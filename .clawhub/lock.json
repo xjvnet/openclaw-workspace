@@ -16,6 +16,10 @@
     "agent-browser-clawdbot": {
       "version": "0.1.0",
       "installedAt": 1770842203209
+    },
+    "apple-calendar": {
+      "version": "1.0.0",
+      "installedAt": 1770881882639
     }
   }
 }
