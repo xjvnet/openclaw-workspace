@@ -1,0 +1,26 @@
+# OpenClaw specific
+SESSION-STATE.md
+.openclaw/
+.credentials/
+.clawhub/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Memory/LanceDB (can be rebuilt)
+memory/lancedb/
+
+# Logs
+*.log
+
+# Temp files
+*.tmp
+*.bak
+
+# Large archives
+*.tar.gz
+*.zip
+
+# Credentials (add to repo if encrypted)
+credentials/
